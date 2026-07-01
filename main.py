@@ -5,6 +5,11 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 import json
+from fastapi import UploadFile, File
+import shutil
+import os
+import subprocess
+import sys
 
 app = FastAPI()
 
@@ -24,6 +29,7 @@ with open("chunk_metadata.json", "r") as f:
     chunk_metadata = json.load(f)
 
 print("Ready to search")
+SIMILARITY_THRESHOLD = 0.45
 
 class SearchQuery(BaseModel):
     query: str
@@ -44,12 +50,16 @@ def search(query: SearchQuery):
 
     for rank, (idx, dist) in enumerate(zip(indices[0], distances[0])):
 
+        # Ignore invalid indices
+        if idx < 0 or idx >= len(chunk_metadata):
+            continue
+
         meta = chunk_metadata[idx]
 
         similarity = 1 / (1 + dist)
 
         results.append({
-            "rank": rank + 1,
+            "rank": len(results) + 1,
             "title": meta["title"],
             "text": meta["text"],
             "similarity": round(float(similarity), 4)
@@ -59,7 +69,6 @@ def search(query: SearchQuery):
         "query": query.query,
         "results": results
     }
-
 
 # ================================
 # ADD THE NEW CODE HERE
@@ -108,4 +117,30 @@ def health():
     return {
         "status": "ok",
         "total_chunks": len(chunk_metadata)
+    }
+def reload_index():
+    global index, chunk_metadata
+
+    index = faiss.read_index("search_index.faiss")
+
+    with open("chunk_metadata.json", "r") as f:
+        chunk_metadata = json.load(f)
+
+    print("Index reloaded successfully!")
+@app.post("/upload")
+async def upload_pdf(file: UploadFile = File(...)):
+    # Create folder if it doesn't exist
+    os.makedirs("data/documents", exist_ok=True)
+
+    # Save uploaded PDF
+    file_path = os.path.join("data/documents", file.filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    # Run your existing indexing script
+    subprocess.run([sys.executable, "build_index.py"], check=True)
+    reload_index()
+    return {
+        "message": "Upload successful"
     }

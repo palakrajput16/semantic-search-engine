@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-sans: "Times New Roman", Times, serif;
+  --font-serif: "Times New Roman", Times, serif;
+  --font-mono: "Geist Mono", monospace;
+
+  --background: #F9F8F6;
+  --foreground: #2C2926;
+  --card: #ffffff;
+  --card-foreground: #2C2926;
+  --primary: #2C2926;
+  --primary-foreground: #F9F8F6;
+  --muted: #E5E0D8;
+  --muted-foreground: #8C7E6D;
+  --accent: #E5E0D8;
+  --destructive: #a83232;
+  --border: rgba(44, 41, 38, 0.12);
+}
+
+.dark {
+  --background: #2C2926;
+  --foreground: #F9F8F6;
+  --card: #38342f;
+  --card-foreground: #F9F8F6;
+  --primary: #F9F8F6;
+  --primary-foreground: #2C2926;
+  --muted: #3d3830;
+  --muted-foreground: #a89888;
+  --accent: #4a443d;
+  --destructive: #a83232;
+  --border: rgba(249, 248, 246, 0.1);
+}
+
+@theme inline {
+  --font-family-sans: var(--font-sans);
+  --font-family-serif: var(--font-serif);
+  --font-family-mono: var(--font-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+}
+
+body {
+  font-family: var(--font-sans);
+}
