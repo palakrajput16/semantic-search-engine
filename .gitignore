@@ -6,3 +6,7 @@ chunk_metadata.json
 
 data/documents/*
 !data/documents/README.md
+
+node_modules/
+.vite/
+dist/
