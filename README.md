@@ -1,18 +1,17 @@
-# Semantic Search Engine using Sentence Transformers and FAISS
+# Semantic Search Engine
 
-A backend-first semantic search engine that retrieves documents based on **meaning rather than exact keyword matches** using vector embeddings.
-
-Instead of relying solely on keyword matching, this project converts both documents and search queries into dense vector embeddings using Sentence Transformers and retrieves the most semantically similar results using FAISS.
-
+Semantic Search Engine is a full-stack application that enables users to upload PDF documents and retrieve information using natural language queries. Instead of relying on keyword matching, it uses Sentence Transformers to generate embeddings and FAISS for efficient vector similarity search, delivering results based on semantic meaning rather than exact word overlap.
 ---
 
 ## Project Highlights
 
-- Semantic document search using Sentence Transformers
-- Fast vector similarity search with FAISS
-- Supports PDF and TXT documents
-- Automatic document chunking
-- FastAPI REST API
+- Full-stack semantic search application
+- React frontend with responsive UI
+- FastAPI backend
+- Upload PDFs directly from the web interface
+- Automatic indexing after upload
+- Semantic search using Sentence Transformers
+- Fast vector similarity search using FAISS
 - Keyword vs Semantic Search comparison
 - Runs completely locally (no paid APIs)
 
@@ -58,26 +57,30 @@ Instead of relying solely on keyword matching, this project converts both docume
 
 ## Features
 
-- Semantic search using Sentence Transformers
-- Vector indexing with FAISS
-- PDF support using PyPDF2
-- Automatic document chunking
-- FastAPI backend
-- Interactive Swagger UI
-- Keyword vs Semantic Search comparison endpoint
+- Semantic document search
+- Upload PDFs directly from the frontend
+- Automatic indexing after every upload
+- Fast vector search using FAISS
+- FastAPI REST API
+- React frontend
+- Dark mode
+- Responsive interface
+- Keyword vs Semantic Search comparison
 
 ---
 
 ## Tech Stack
 
-| Component           | Technology            |
-| -------------------- | --------------------- |
-| Backend              | FastAPI               |
-| Embeddings           | Sentence Transformers |
-| Vector Database      | FAISS                 |
-| PDF Parsing          | PyPDF2                |
-| Language              | Python                |
-| Numerical Computing  | NumPy                 |
+| Component     | Technology            |
+| ------------- | --------------------- |
+| Frontend      | React + Vite          |
+| Styling       | Tailwind CSS          |
+| Backend       | FastAPI               |
+| Embeddings    | Sentence Transformers |
+| Vector Search | FAISS                 |
+| PDF Parsing   | PyPDF2                |
+| ML Framework  | PyTorch               |
+| Language      | Python                |
 
 ---
 
@@ -89,13 +92,18 @@ semantic-search-engine/
 ├── data/
 │   └── documents/
 │
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── ...
+│
 ├── build_index.py
 ├── document_loader.py
 ├── main.py
-│
+├── search_index.faiss
+├── chunk_metadata.json
 ├── requirements.txt
-├── README.md
-└── screenshots/
+└── README.md
 ```
 
 ---
@@ -143,84 +151,64 @@ pip install -r requirements.txt
 ```
 
 ---
+## Running the Project
 
-## Adding Documents
-
-Place PDF or TXT files inside `data/documents/`
-
-Example:
-
-```
-documents/
-├── paper.pdf
-├── notes.pdf
-└── article.txt
-```
-
----
-
-## 🔨 Build the Search Index
+### 1. Start the Backend
 
 ```bash
-python build_index.py
-```
+.\venv\Scripts\activate
 
-This creates:
+pip install -r requirements.txt
 
-- `search_index.faiss`
-- `chunk_metadata.json`
-
----
-
-## Run the API
-
-```bash
 uvicorn main:app --reload
 ```
 
-Open: `http://127.0.0.1:8000/docs`
+The backend runs on:
 
----
-
-## Example Search
-
-**Request**
-
-```json
-{
-    "query": "machine learning",
-    "top_k": 5
-}
 ```
-
-**Response**
-
-```json
-{
-  "query": "machine learning",
-  "results": [
-    {
-      "rank": 1,
-      "title": "Research Paper",
-      "similarity": 0.91
-    }
-  ]
-}
+http://127.0.0.1:8000
 ```
 
 ---
 
-## 🔮 Future Improvements
+### 2. Start the Frontend
 
-- React frontend
-- Drag-and-drop PDF upload
-- Automatic indexing after upload
-- Highlight matching passages
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
+
+The frontend runs on:
+
+```
+http://localhost:5173
+```
+
+## How to Use
+
+1. Start both the FastAPI backend and the React frontend.
+2. Open the application at `http://localhost:5173`.
+3. Upload one or more PDF documents.
+4. Wait for indexing to complete.
+5. Enter a natural language query.
+6. View the ranked semantic search results.
+7. Upload additional PDFs at any time to expand the searchable collection.
+
+---
+
+## Future Improvements
+
+- Improve search relevance using cosine similarity
 - Hybrid Search (Semantic + BM25)
+- Document library with delete functionality
+- Highlight matched passages
 - Metadata filtering
-- Authentication
-- Docker deployment
-- Public cloud deployment
+- Authentication and user accounts
+- Docker support
+- Cloud deployment
 
 ---
 
